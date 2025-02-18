@@ -6,7 +6,9 @@ import os
 import time
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GdkPixbuf
+
+from DashWindow import DashWindow
 
 try:
     import locale
@@ -34,41 +36,39 @@ class MainWindow(Gtk.Window):
         self.set_visual(self.get_screen().get_rgba_visual())
         self._time = 0
 
-        # Load CSS for transparency
-        self.load_css()
-
         self.set_application(application)
-        but = Gtk.Button()
+        but = Gtk.Button(name="button")
+        image = Gtk.Image.new_from_icon_name("gtk-yes", Gtk.IconSize.BUTTON)
+        image.set_pixel_size(64)
+        but.add(image)
 
         # Signals
         self.connect("destroy", Gtk.main_quit)
         but.connect("motion-notify-event", self.on_motion_notify_event)
         but.connect("button-release-event", self.on_release_event)
         but.connect("button-press-event", self.on_press_event)
+        but.set_size_request(64,64)
 
         # Add button
         self.add(but)
+        # Dash
+        self.dash = DashWindow(self)
+
+        # Add some dash button
+        minify = Gtk.Button(label="minify")
+        minify.connect("clicked", self.dash.on_hide)
+        self.dash.add_button(minify)
+
+        # Load CSS for transparency
+        self.dash.load_css()
 
         # show main window
         self.show_all()
 
     def do_popup_event(self, widget=None, event=None):
         print("Hello World")
+        self.dash.on_show()
 
-    def load_css(self):
-        # Create a CSS provider and load the CSS data
-        css_provider = Gtk.CssProvider()
-        css_data = b"""
-        #toy {
-            background-color: rgba(0, 0, 0, 0);
-        }
-        """
-        css_provider.load_from_data(css_data)
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
-            css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
 
     def on_release_event(self, widget, event):
         # Do event if clicked
