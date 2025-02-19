@@ -1,9 +1,11 @@
 #include "MainWindow.h"
-#include <QPushButton>
+#include <QLabel>
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
 #include <stdio.h>
+
+#define butsize 48
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowFlags(Qt::WindowStaysOnTopHint
@@ -14,15 +16,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
                       | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    QPushButton *button = new QPushButton(this);
-    button->setFixedSize(64, 64);
-    setFixedSize(64, 64);
+    QLabel *move = new QLabel("Test", this);
+    QIcon icon = QIcon(":images/move-icon.svg");
+    QPixmap pixmap = icon.pixmap(icon.actualSize(QSize(butsize, butsize)));
+    move->setPixmap(pixmap);
+    move->setStyleSheet(QString("background-color: none;"));
+    move->setFixedSize(butsize, butsize);
 
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(button);
-    setLayout(layout);
+    setFixedSize(butsize, butsize);
 
-    button->installEventFilter(this);
+
+    installEventFilter(this);
 }
 
 void MainWindow::onButtonClicked() {
