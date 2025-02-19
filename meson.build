@@ -1,21 +1,19 @@
-project(
-    'etap-toy',
-    version : '1.0',
-    license: ['GplV3']
-)
+project('example', 'cpp')
+# Source files
+src = [
+    'src/main.cpp',
+    'src/MainWindow.cpp'
+]
 
-subdir('po')
+# Qt5 dependencies
+qt6_dep = [
+    dependency('Qt6Core'),
+    dependency('Qt6Gui'),
+    dependency('Qt6Widgets'),
+]
 
-prefix = get_option('prefix')
-appdir = prefix / 'share/etap'
+# -fPIC required
+add_project_arguments('-fPIC', language: 'cpp')
 
-glibdir = get_option('prefix')/'share/glib-2.0/schemas/'
-icondir = get_option('prefix')/'share/icons/hicolor/scalable/apps'
-desktopdir = get_option('prefix')/'share/applications'
-
-install_data('data/tr.org.etap.toy.svg', install_dir : icondir)
-install_data('data/tr.org.etap.toy.desktop', install_dir : desktopdir)
-install_data('data/tr.org.etap.toy.gschema.xml', install_dir : glibdir)
-
-install_subdir('toy/', install_dir: appdir)
-install_data('toy.py', install_dir : bindir, rename: 'etap-toy')
+# executable file
+executable('main', src, dependencies: qt6_dep)

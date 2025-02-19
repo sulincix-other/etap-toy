@@ -1,8 +1,0 @@
-<schemalist>
-  <schema id="tr.org.etap.toy" path="/tr/org/etap/toy/">
-    <key type="s" name="example">
-      <default>"Hello World"</default>
-      <summary>Example</summary>
-    </key>
- </schema>
-</schemalist>

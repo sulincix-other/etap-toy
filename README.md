@@ -1,4 +1,4 @@
-# Wtap toy
+# Etap toy
 ## How to build
 ```
 meson setup build
