@@ -22,6 +22,7 @@ public:
                       | Qt::X11BypassWindowManagerHint
                       | Qt::WindowStaysOnTopHint
                       | Qt::WindowSystemMenuHint
+                      | Qt::WindowDoesNotAcceptFocus
                       | Qt::FramelessWindowHint);
         this->setAttribute(Qt::WA_TranslucentBackground);
         this->installEventFilter(this);

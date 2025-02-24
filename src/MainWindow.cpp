@@ -12,19 +12,18 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowFlags(Qt::WindowStaysOnTopHint
                       | Qt::Tool
-                      | Qt::X11BypassWindowManagerHint
                       | Qt::WindowStaysOnTopHint
                       | Qt::WindowSystemMenuHint
+                      | Qt::WindowDoesNotAcceptFocus
                       | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
-
     QLabel *move = new QLabel("Test", this);
     QIcon icon = QIcon(":images/move-icon.svg");
     QPixmap pixmap = icon.pixmap(icon.actualSize(QSize(butsize, butsize)));
     move->setPixmap(pixmap);
     move->setStyleSheet(QString("background-color: none;"));
     move->setFixedSize(butsize, butsize);
-
+    setAttribute(Qt::WA_ShowWithoutActivating);
     setFixedSize(butsize, butsize);
 
 
