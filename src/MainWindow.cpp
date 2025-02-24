@@ -2,14 +2,20 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMouseEvent>
+#include <QScreen>
+#include <QGuiApplication>
 
 #include "toy.h"
 
 #include <stdio.h>
 
-#define butsize 48
+
+float scale = 1;
+#define butsize 48 * scale
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+    QScreen *screen = QGuiApplication::primaryScreen();
+    scale = screen->size().height() / 1080.0;
     setWindowFlags(Qt::WindowStaysOnTopHint
                       | Qt::Tool
                       | Qt::WindowStaysOnTopHint
