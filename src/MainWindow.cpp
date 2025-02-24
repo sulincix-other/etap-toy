@@ -3,6 +3,8 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
+#include "toy.h"
+
 #include <stdio.h>
 
 #define butsize 48
@@ -27,10 +29,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 
     installEventFilter(this);
+    this->move(0,0);
+    show();
 }
 
 void MainWindow::onButtonClicked() {
     puts("Hello World");
+    doRightClick();
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {

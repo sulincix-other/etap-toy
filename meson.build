@@ -2,7 +2,8 @@ project('example', 'cpp')
 # Source files
 src = [
     'src/main.cpp',
-    'src/MainWindow.cpp'
+    'src/MainWindow.cpp',
+    'src/toy/RightClick.cpp'
 ]
 
 # Qt5 dependencies
