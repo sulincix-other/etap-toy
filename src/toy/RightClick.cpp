@@ -6,10 +6,11 @@
 #include <QMouseEvent>
 #include <QScreen>
 
+#include "../toy.h"
+
 #include <stdio.h>
-
 #include <unistd.h>
-
+#include <linux/uinput.h>
 
 class RightClick : public QMainWindow {
 
@@ -45,16 +46,14 @@ public:
             hide();
             usleep(30000);
             // move mouse event position
-            args1 << "mousemove" << QString::number(x) << QString::number(y);
-            proc1.execute("xdotool", args1);
+            uinput_send(EV_ABS, ABS_X, x);
+            uinput_send(EV_ABS, ABS_Y, y);
             usleep(30000);
             // execute right click down
-            args2 << "mousedown" << "3";
-            proc2.execute("xdotool", args2);
+            uinput_send(EV_KEY, BTN_RIGHT, 1);
             usleep(30000);
             // execute right click up
-            args2 << "mouseup" << "3";
-            proc2.execute("xdotool", args2);
+            uinput_send(EV_KEY, BTN_RIGHT, 0);
             usleep(30000);
         }
         return QMainWindow::eventFilter(obj, event);

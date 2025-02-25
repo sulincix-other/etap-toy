@@ -1,9 +1,10 @@
-project('example', 'cpp')
+project('example', 'cpp', 'c')
 # Source files
 src = [
     'src/main.cpp',
     'src/MainWindow.cpp',
-    'src/toy/RightClick.cpp'
+    'src/toy/RightClick.cpp',
+    'src/uinput_client.c'
 ]
 
 # Qt5 dependencies
@@ -23,3 +24,4 @@ add_project_arguments('-fPIC', language: 'cpp')
 
 # executable file
 executable('main', src, dependencies: qt6_dep)
+executable('uinput', ['src/uinput_service.c'])

@@ -1,2 +1,6 @@
 extern float scale;
-extern void doRightClick();
+void doRightClick();
+
+extern "C" {
+    void uinput_send(int type, int code, int value);
+}
