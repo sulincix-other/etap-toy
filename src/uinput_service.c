@@ -49,9 +49,9 @@ void socket_init() {
     }
     chmod(SERVER_SOCK_FILE, S_IWUSR | S_IWGRP | S_IWOTH);
 }
-char * socket_read() {
-    char * buff = malloc(SOCKET_BUFFER_LENGTH * sizeof(char));
-    recvfrom(soc_server_fd, buff, SOCKET_BUFFER_LENGTH, 0, (struct sockaddr * ) & server_from, & fromlen);
+int *socket_read() {
+    int *buff = malloc(SOCKET_BUFFER_LENGTH * sizeof(int));
+    recvfrom(soc_server_fd, buff, SOCKET_BUFFER_LENGTH * sizeof(int), 0, (struct sockaddr * ) & server_from, & fromlen);
     return buff;
 }
 
@@ -103,7 +103,7 @@ int main(int argc, char** argv){
     (void)argc; (void)argv;
     uinput_init();
     socket_init();
-    char *buf;
+    int *buf;
     puts("Ready");
     while(1){
         buf = socket_read();

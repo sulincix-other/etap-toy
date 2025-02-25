@@ -36,13 +36,13 @@ void uinput_send(int type, int code, int value){
         client_init();
         sock_init = true;
     }
-    char buff[SOCKET_BUFFER_LENGTH];
-    buff[0] = (char)type;
-    buff[1] = (char)code;
-    buff[2] = (char)value;
-    buff[3] = '0';
+    int buff[SOCKET_BUFFER_LENGTH];
+    buff[0] = type;
+    buff[1] = code;
+    buff[2] = value;
+    buff[3] = 0;
     printf("%d %d %d\n",buff[0], buff[1], buff[2]);
-    if (send(soc_client_fd, buff, strlen(buff) + 1, 0) == -1) {
+    if (send(soc_client_fd, buff, sizeof(int)*SOCKET_BUFFER_LENGTH, 0) == -1) {
         perror("send");
     }
 }
