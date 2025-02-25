@@ -13,8 +13,8 @@ int main(int argc, char *argv[]) {
     setenv("QT_SCALE_FACTOR", "1", 1);
 
     QApplication app(argc, argv);
-    ctx_init();
     MainWindow window;
+    ctx_init();
     window.show();
     return app.exec();
 }

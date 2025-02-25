@@ -64,13 +64,12 @@ private:
 };
 
 extern "C" {
-    static RightClick *rc;
-    void right_click_init(){
-        if(rc == nullptr){
-            rc = new RightClick();
-        }
+    void right_click_init(){}
+}
+static RightClick *rc;
+void doRightClick(){
+    if(rc == nullptr){
+        rc = new RightClick();
     }
-    void doRightClick(){
-        rc->show();
-    }
+    rc->show();
 }
