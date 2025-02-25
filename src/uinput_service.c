@@ -62,41 +62,96 @@ static void emit(int fd, int type, int code, int val) {
     ie.type = type;
     ie.code = code;
     ie.value = val;
-    ie.time.tv_sec = 0;
-    ie.time.tv_usec = 0;
 
-    write(fd, & ie, sizeof(ie));
+    if (write(fd, &ie, sizeof(ie)) < 0)
+        fprintf(stderr,"error: write()");
 }
 
 int fd;
 
-void uinput_init(void) {
-    system("modprobe uinput");
-    struct uinput_setup usetup;
+void uinput_init() {
+    if ((fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK)) < 0)
+		fprintf(stderr,"error: open");
+	// enable synchronization
+	if (ioctl(fd, UI_SET_EVBIT, EV_SYN) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_EVBIT EV_SYN");
 
-    fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+	// enable 1 button
+	if (ioctl(fd, UI_SET_EVBIT, EV_KEY) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_EVBIT EV_KEY");
+	if (ioctl(fd, UI_SET_KEYBIT, BTN_TOUCH) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
+	if (ioctl(fd, UI_SET_KEYBIT, BTN_LEFT) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
+	if (ioctl(fd, UI_SET_KEYBIT, BTN_RIGHT) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
+	if (ioctl(fd, UI_SET_KEYBIT, BTN_TOOL_PEN) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
+	if (ioctl(fd, UI_SET_KEYBIT, BTN_STYLUS) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
+	if (ioctl(fd, UI_SET_KEYBIT, BTN_STYLUS2) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
 
-    ioctl(fd, UI_SET_EVBIT, EV_SYN);
-	  ioctl(fd, UI_SET_EVBIT, EV_KEY);
-	  ioctl(fd, UI_SET_KEYBIT, BTN_LEFT);
-	  ioctl(fd, UI_SET_KEYBIT, BTN_RIGHT);
-	  ioctl(fd, UI_SET_KEYBIT, BTN_TOUCH);
+	// enable 2 main axes + pressure (absolute positioning)
+	if (ioctl(fd, UI_SET_EVBIT, EV_ABS) < 0)
+		fprintf(stderr,"error: ioctl UI_SET_EVBIT EV_ABS");
+	if (ioctl(fd, UI_SET_ABSBIT, ABS_X) < 0)
+		fprintf(stderr,"error: ioctl UI_SETEVBIT ABS_X");
+	if (ioctl(fd, UI_SET_ABSBIT, ABS_Y) < 0)
+		fprintf(stderr,"error: ioctl UI_SETEVBIT ABS_Y");
+	if (ioctl(fd, UI_SET_ABSBIT, ABS_PRESSURE) < 0)
+		fprintf(stderr,"error: ioctl UI_SETEVBIT ABS_PRESSURE");
 
-    ioctl(fd, UI_SET_EVBIT, EV_ABS);
-	  ioctl(fd, UI_SET_ABSBIT, ABS_X);
-	  ioctl(fd, UI_SET_ABSBIT, ABS_Y);
+        {
+          struct uinput_abs_setup abs_setup;
+          struct uinput_setup setup;
 
-    memset( & usetup, 0, sizeof(usetup));
-    usetup.id.bustype = BUS_USB;
-    usetup.id.vendor = 0x3169;
-    usetup.id.product = 0x3169;
-    usetup.id.version = 31;
-    strcpy(usetup.name, "Amogus Mouse");
+          memset(&abs_setup, 0, sizeof(abs_setup));
+          abs_setup.code = ABS_X;
+          abs_setup.absinfo.value = 0;
+          abs_setup.absinfo.minimum = 0;
+          abs_setup.absinfo.maximum = 3840;
+          abs_setup.absinfo.fuzz = 0;
+          abs_setup.absinfo.flat = 0;
+          abs_setup.absinfo.resolution = 1;
+          if (ioctl(fd, UI_ABS_SETUP, &abs_setup) < 0)
+            fprintf(stderr,"error: UI_ABS_SETUP ABS_X");
 
-    ioctl(fd, UI_DEV_SETUP, & usetup);
-    ioctl(fd, UI_DEV_CREATE);
+          memset(&abs_setup, 0, sizeof(abs_setup));
+          abs_setup.code = ABS_Y;
+          abs_setup.absinfo.value = 0;
+          abs_setup.absinfo.minimum = 0;
+          abs_setup.absinfo.maximum = 2160;
+          abs_setup.absinfo.fuzz = 0;
+          abs_setup.absinfo.flat = 0;
+          abs_setup.absinfo.resolution = 1;
+          if (ioctl(fd, UI_ABS_SETUP, &abs_setup) < 0)
+            fprintf(stderr,"error: UI_ABS_SETUP ABS_Y");
 
-    sleep(1);
+          memset(&abs_setup, 0, sizeof(abs_setup));
+          abs_setup.code = ABS_PRESSURE;
+          abs_setup.absinfo.value = 1;
+          abs_setup.absinfo.minimum = 0;
+          abs_setup.absinfo.maximum = 1;
+          abs_setup.absinfo.fuzz = 0;
+          abs_setup.absinfo.flat = 0;
+          abs_setup.absinfo.resolution = 0;
+          if (ioctl(fd, UI_ABS_SETUP, &abs_setup) < 0)
+            fprintf(stderr,"error: UI_ABS_SETUP ABS_PRESSURE");
+
+          memset(&setup, 0, sizeof(setup));
+          snprintf(setup.name, UINPUT_MAX_NAME_SIZE, "Amogus Mouse Device");
+          setup.id.bustype = BUS_VIRTUAL;
+          setup.id.vendor  = 0x1;
+          setup.id.product = 0x1;
+          setup.id.version = 2;
+          setup.ff_effects_max = 0;
+          if (ioctl(fd, UI_DEV_SETUP, &setup) < 0)
+            fprintf(stderr,"error: UI_DEV_SETUP");
+
+          if (ioctl(fd, UI_DEV_CREATE) < 0)
+            fprintf(stderr,"error: ioctl");
+        }
 }
 
 int main(int argc, char** argv){
@@ -109,8 +164,6 @@ int main(int argc, char** argv){
         buf = socket_read();
         printf("%d %d %d\n",buf[0], buf[1], buf[2]);
         emit(fd, buf[0], buf[1], buf[2]);
-        emit(fd, EV_SYN, SYN_REPORT, 0);
-        usleep(30000);
     }
     return 0;
 }
