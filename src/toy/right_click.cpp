@@ -15,6 +15,7 @@ class RightClick : public QMainWindow {
 
 public:
     QScreen *screen;
+    QWidget *area;
 
     RightClick(){
         this->setWindowFlags(Qt::WindowStaysOnTopHint
@@ -26,13 +27,17 @@ public:
                       | Qt::FramelessWindowHint);
         this->setAttribute(Qt::WA_TranslucentBackground);
         this->installEventFilter(this);
+        area = new QWidget(this);
+        area->setStyleSheet(QString("background-color: #31A00000;"));
         screen = QGuiApplication::primaryScreen();
         this->setFixedSize(screen->size().width(), screen->size().height());
+        area->setFixedSize(screen->size().width(), screen->size().height());
     }
 
     void resizeEvent(QResizeEvent *event) override {
         (void)event;
         this->setFixedSize(screen->size().width(), screen->size().height());
+        area->setFixedSize(screen->size().width(), screen->size().height());
     }
 
     bool eventFilter(QObject *obj, QEvent *event) {
