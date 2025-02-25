@@ -1,0 +1,20 @@
+Source: etap-toy
+Section: utils
+Priority: optional
+Maintainer: Ali Rıza KESKİN <ali.riza.keskin@pardus.org.tr>
+Build-Depends: meson, ninja-build,
+         qt6-base-dev,
+         qtchooser,
+         qt6-svg-dev
+Standards-Version: 4.3.0
+Homepage: https://pardus.org.tr
+
+Package: etap-toy
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         libqt6svg6,
+         libqt6core6,
+         libqt6gui6
+Description: Desktop toy for etap.
+ An usefull toy for etap.

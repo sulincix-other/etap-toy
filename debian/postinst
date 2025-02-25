@@ -1,0 +1,6 @@
+#!/bin/sh
+if systemctl >/dev/null; then
+    systemctl enable uinput-etap
+elif command -v update-rc.d >/dev/null; then
+    update-rc.d uinput-etap enable
+fi
