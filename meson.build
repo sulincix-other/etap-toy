@@ -15,7 +15,7 @@ src = [
     'src/uinput_client.c'
 ]
 
-src += run_command('find', 'src/toy','-type','f',check:true).stdout().strip().split('\n')
+src += run_command('find', 'src/toy','-type','f' , '-iname', '*.c*' ,check:true).stdout().strip().split('\n')
 
 # Qt5 dependencies
 qt6_dep = [
