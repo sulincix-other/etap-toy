@@ -14,6 +14,10 @@ qt6_dep = [
     dependency('Qt6Widgets'),
 ]
 
+uinput_dep = [
+    dependency('libevdev')
+]
+
 rcc_args = ['rcc', './data/resources.qrc', '-o', meson.current_build_dir()/'resources.cpp']
 run_command(rcc_args, check:true)
 src += [meson.current_build_dir()/'resources.cpp']
@@ -24,4 +28,4 @@ add_project_arguments('-fPIC', language: 'cpp')
 
 # executable file
 executable('main', src, dependencies: qt6_dep)
-executable('uinput', ['src/uinput_service.c'])
+executable('uinput', ['src/uinput_service.c'], dependencies: uinput_dep)

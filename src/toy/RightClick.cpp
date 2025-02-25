@@ -47,18 +47,12 @@ public:
             usleep(30000);
             // move mouse event position
             uinput_send(EV_ABS, ABS_X, (x *3840) / screen->size().width());
-            uinput_send(EV_SYN, SYN_REPORT, 0);
             uinput_send(EV_ABS, ABS_Y, (y * 2160) / screen->size().height());
-            uinput_send(EV_SYN, SYN_REPORT, 0);
-            usleep(30000);
             // execute right click down
             uinput_send(EV_KEY, BTN_RIGHT, 1);
-            uinput_send(EV_SYN, SYN_REPORT, 0);
-            usleep(30000);
+            usleep(100000);
             // execute right click up
             uinput_send(EV_KEY, BTN_RIGHT, 0);
-            uinput_send(EV_SYN, SYN_REPORT, 0);
-            usleep(30000);
         }
         return QMainWindow::eventFilter(obj, event);
     }

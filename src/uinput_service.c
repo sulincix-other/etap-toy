@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-
+#include <libevdev-1.0/libevdev/libevdev-uinput.h>
 
 #include <unistd.h>
 #include <sys/un.h>
@@ -56,102 +56,31 @@ int *socket_read() {
 }
 
 
-static void emit(int fd, int type, int code, int val) {
-    struct input_event ie;
 
-    ie.type = type;
-    ie.code = code;
-    ie.value = val;
+struct libevdev *dev;
+struct libevdev_uinput *uidev;
+void uinput_init(){
+    int err;
+    struct input_absinfo absinfo_x;
+    struct input_absinfo absinfo_y;
+    absinfo_x.maximum = 3840;
+    absinfo_x.resolution = 1;
+    absinfo_y.maximum = 2160;
+    absinfo_y.resolution = 1;
 
-    if (write(fd, &ie, sizeof(ie)) < 0)
-        fprintf(stderr,"error: write()");
-}
+    dev = libevdev_new();
+    libevdev_set_name(dev, "Amogus mouse");
+    libevdev_enable_event_type(dev, EV_ABS);
+    libevdev_enable_event_type(dev, EV_KEY);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_RIGHT, NULL);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_LEFT, NULL);
+    libevdev_enable_event_code(dev, EV_ABS, ABS_X, &absinfo_x);
+    libevdev_enable_event_code(dev, EV_ABS, ABS_Y, &absinfo_y);
 
-int fd;
+    err = libevdev_uinput_create_from_device(dev, LIBEVDEV_UINPUT_OPEN_MANAGED, &uidev);
+    if (err != 0) exit(err);
 
-void uinput_init() {
-    if ((fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK)) < 0)
-		fprintf(stderr,"error: open");
-	// enable synchronization
-	if (ioctl(fd, UI_SET_EVBIT, EV_SYN) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_EVBIT EV_SYN");
-
-	// enable 1 button
-	if (ioctl(fd, UI_SET_EVBIT, EV_KEY) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_EVBIT EV_KEY");
-	if (ioctl(fd, UI_SET_KEYBIT, BTN_TOUCH) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
-	if (ioctl(fd, UI_SET_KEYBIT, BTN_LEFT) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
-	if (ioctl(fd, UI_SET_KEYBIT, BTN_RIGHT) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
-	if (ioctl(fd, UI_SET_KEYBIT, BTN_TOOL_PEN) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
-	if (ioctl(fd, UI_SET_KEYBIT, BTN_STYLUS) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
-	if (ioctl(fd, UI_SET_KEYBIT, BTN_STYLUS2) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_KEYBIT");
-
-	// enable 2 main axes + pressure (absolute positioning)
-	if (ioctl(fd, UI_SET_EVBIT, EV_ABS) < 0)
-		fprintf(stderr,"error: ioctl UI_SET_EVBIT EV_ABS");
-	if (ioctl(fd, UI_SET_ABSBIT, ABS_X) < 0)
-		fprintf(stderr,"error: ioctl UI_SETEVBIT ABS_X");
-	if (ioctl(fd, UI_SET_ABSBIT, ABS_Y) < 0)
-		fprintf(stderr,"error: ioctl UI_SETEVBIT ABS_Y");
-	if (ioctl(fd, UI_SET_ABSBIT, ABS_PRESSURE) < 0)
-		fprintf(stderr,"error: ioctl UI_SETEVBIT ABS_PRESSURE");
-
-        {
-          struct uinput_abs_setup abs_setup;
-          struct uinput_setup setup;
-
-          memset(&abs_setup, 0, sizeof(abs_setup));
-          abs_setup.code = ABS_X;
-          abs_setup.absinfo.value = 0;
-          abs_setup.absinfo.minimum = 0;
-          abs_setup.absinfo.maximum = 3840;
-          abs_setup.absinfo.fuzz = 0;
-          abs_setup.absinfo.flat = 0;
-          abs_setup.absinfo.resolution = 1;
-          if (ioctl(fd, UI_ABS_SETUP, &abs_setup) < 0)
-            fprintf(stderr,"error: UI_ABS_SETUP ABS_X");
-
-          memset(&abs_setup, 0, sizeof(abs_setup));
-          abs_setup.code = ABS_Y;
-          abs_setup.absinfo.value = 0;
-          abs_setup.absinfo.minimum = 0;
-          abs_setup.absinfo.maximum = 2160;
-          abs_setup.absinfo.fuzz = 0;
-          abs_setup.absinfo.flat = 0;
-          abs_setup.absinfo.resolution = 1;
-          if (ioctl(fd, UI_ABS_SETUP, &abs_setup) < 0)
-            fprintf(stderr,"error: UI_ABS_SETUP ABS_Y");
-
-          memset(&abs_setup, 0, sizeof(abs_setup));
-          abs_setup.code = ABS_PRESSURE;
-          abs_setup.absinfo.value = 1;
-          abs_setup.absinfo.minimum = 0;
-          abs_setup.absinfo.maximum = 1;
-          abs_setup.absinfo.fuzz = 0;
-          abs_setup.absinfo.flat = 0;
-          abs_setup.absinfo.resolution = 0;
-          if (ioctl(fd, UI_ABS_SETUP, &abs_setup) < 0)
-            fprintf(stderr,"error: UI_ABS_SETUP ABS_PRESSURE");
-
-          memset(&setup, 0, sizeof(setup));
-          snprintf(setup.name, UINPUT_MAX_NAME_SIZE, "Amogus Mouse Device");
-          setup.id.bustype = BUS_VIRTUAL;
-          setup.id.vendor  = 0x1;
-          setup.id.product = 0x1;
-          setup.id.version = 2;
-          setup.ff_effects_max = 0;
-          if (ioctl(fd, UI_DEV_SETUP, &setup) < 0)
-            fprintf(stderr,"error: UI_DEV_SETUP");
-
-          if (ioctl(fd, UI_DEV_CREATE) < 0)
-            fprintf(stderr,"error: ioctl");
-        }
+    sleep(1);
 }
 
 int main(int argc, char** argv){
@@ -162,8 +91,9 @@ int main(int argc, char** argv){
     puts("Ready");
     while(1){
         buf = socket_read();
+        libevdev_uinput_write_event(uidev, buf[0], buf[1], buf[2]);
+        libevdev_uinput_write_event(uidev, EV_SYN, SYN_REPORT, 0);
         printf("%d %d %d\n",buf[0], buf[1], buf[2]);
-        emit(fd, buf[0], buf[1], buf[2]);
     }
     return 0;
 }
