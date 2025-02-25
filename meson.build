@@ -12,7 +12,6 @@ src = [
     meson.current_build_dir() / 'ctx.c',
     'src/main.cpp',
     'src/MainWindow.cpp',
-    'src/uinput_client.c'
 ]
 
 src += run_command('find', 'src/toy','-type','f' , '-iname', '*.c*' ,check:true).stdout().strip().split('\n')

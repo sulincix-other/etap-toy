@@ -19,9 +19,7 @@ int soc_client_fd;
 struct sockaddr_un client_from;
 struct sockaddr_un client_addr;
 
-static bool sock_init = false;
-
-void client_init() {
+void uinput_init() {
     soc_client_fd = socket(PF_UNIX, SOCK_DGRAM, 0);
     memset(&client_addr, 0, sizeof(client_addr));
     client_addr.sun_family = AF_UNIX;
@@ -31,11 +29,11 @@ void client_init() {
     connect(soc_client_fd, (struct sockaddr *) &client_addr, sizeof(client_addr));
 
 }
+void uinput_close(){
+    unlink(SERVER_SOCK_FILE);
+}
+
 void uinput_send(int type, int code, int value){
-    if(!sock_init){
-        client_init();
-        sock_init = true;
-    }
     int buff[SOCKET_BUFFER_LENGTH];
     buff[0] = type;
     buff[1] = code;
@@ -44,6 +42,9 @@ void uinput_send(int type, int code, int value){
     printf("%d %d %d\n",buff[0], buff[1], buff[2]);
     if (send(soc_client_fd, buff, sizeof(int)*SOCKET_BUFFER_LENGTH, 0) == -1) {
         perror("send");
+        uinput_close();
+        uinput_init();
+        uinput_send(type, code, value);
     }
 }
 
