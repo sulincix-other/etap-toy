@@ -1,5 +1,4 @@
 #include <QApplication>
-
 #include <QProcess>
 #include <QDebug>
 #include <QMainWindow>
@@ -64,11 +63,14 @@ private:
 
 };
 
-RightClick *rc;
-
-void doRightClick(){
-    if(rc == nullptr){
-        rc = new RightClick();
+extern "C" {
+    static RightClick *rc;
+    void right_click_init(){
+        if(rc == nullptr){
+            rc = new RightClick();
+        }
     }
-    rc->show();
+    void doRightClick(){
+        rc->show();
+    }
 }

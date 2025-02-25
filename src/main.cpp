@@ -1,6 +1,10 @@
 #include <QApplication>
 #include "MainWindow.h"
 
+extern "C" {
+    extern void ctx_init();
+}
+
 int main(int argc, char *argv[]) {
     setenv("QT_QPA_PLATFORM", "xcb;wayland",1);
     //Force ignore system dpi
@@ -9,6 +13,7 @@ int main(int argc, char *argv[]) {
     setenv("QT_SCALE_FACTOR", "1", 1);
 
     QApplication app(argc, argv);
+    ctx_init();
     MainWindow window;
     window.show();
     return app.exec();
