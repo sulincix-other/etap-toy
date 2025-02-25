@@ -59,23 +59,44 @@ int *socket_read() {
 
 struct libevdev *dev;
 struct libevdev_uinput *uidev;
+struct input_absinfo absinfo_x;
+struct input_absinfo absinfo_y;
+int err;
 void uinput_init(){
-    int err;
-    struct input_absinfo absinfo_x;
-    struct input_absinfo absinfo_y;
+    // load module
+    err = system("modprobe uinput");
+    if (err != 0) exit(err);
+
+    dev = libevdev_new();
+    libevdev_set_name(dev, "Amogus device");
+
+    // ABS info
     absinfo_x.maximum = 3840;
     absinfo_x.resolution = 1;
     absinfo_y.maximum = 2160;
     absinfo_y.resolution = 1;
 
-    dev = libevdev_new();
-    libevdev_set_name(dev, "Amogus mouse");
+    // EV_ABS
     libevdev_enable_event_type(dev, EV_ABS);
-    libevdev_enable_event_type(dev, EV_KEY);
-    libevdev_enable_event_code(dev, EV_KEY, BTN_RIGHT, NULL);
-    libevdev_enable_event_code(dev, EV_KEY, BTN_LEFT, NULL);
     libevdev_enable_event_code(dev, EV_ABS, ABS_X, &absinfo_x);
     libevdev_enable_event_code(dev, EV_ABS, ABS_Y, &absinfo_y);
+
+    // EV_KEY (mouse)
+    libevdev_enable_event_type(dev, EV_KEY);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_RIGHT, NULL);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_TOUCH, NULL);
+    libevdev_enable_event_code(dev, EV_KEY, BTN_LEFT, NULL);
+
+    // EV_KEY (keyboard)
+    for (int i = 1; i <= 245; i++) {
+        libevdev_enable_event_code(dev, EV_KEY, i, NULL);
+    }
+
+    // EV_REL
+    libevdev_enable_event_type(dev, EV_REL);
+    libevdev_enable_event_code(dev, EV_REL, REL_X, NULL);
+    libevdev_enable_event_code(dev, EV_REL, REL_Y, NULL);
+
 
     err = libevdev_uinput_create_from_device(dev, LIBEVDEV_UINPUT_OPEN_MANAGED, &uidev);
     if (err != 0) exit(err);
