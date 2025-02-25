@@ -63,13 +63,12 @@ private:
 
 };
 
-extern "C" {
-    void right_click_init(){}
-}
 static RightClick *rc;
-void doRightClick(){
-    if(rc == nullptr){
+extern "C" {
+    void right_click_init(){
         rc = new RightClick();
     }
+}
+void doRightClick(){
     rc->show();
 }

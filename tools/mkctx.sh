@@ -8,5 +8,5 @@ echo "void ctx_init(){" >> $1/ctx.c
 for file in $(ls src/toy/) ; do
     mod=${file/.*/}
     echo "    ${mod}_init();"
-done >> ctx.c
+done >> $1/ctx.c
 echo "}" >> $1/ctx.c
