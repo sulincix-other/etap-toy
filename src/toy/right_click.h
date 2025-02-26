@@ -1,4 +1,4 @@
 extern "C" {
-    void doRightClick();
+    void doRightClick(int but);
     void right_click_init();
 }

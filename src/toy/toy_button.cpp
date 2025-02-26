@@ -38,6 +38,7 @@ ToyButton::ToyButton(QWidget *parent, QString path) : QWidget(parent) {
     img->setFixedSize(butsize, butsize);
     setFixedSize(butsize, butsize);
     setImage(path);
+    installEventFilter(this);
     show();
 }
 
@@ -47,9 +48,25 @@ void ToyButton::setImage(QString path) {
     img->setPixmap(pixmap);
 }
 
-void ToyButton::dummy(){
-        puts("Ü");
+void ToyButton::action(){
+    puts(type.toStdString().c_str());
+    if(type == "command"){
+        system((actionValue+"&").toStdString().c_str());
+    } else if(type == "click"){
+        doRightClick(actionValue.toInt());
+    }
+    toys->hide();
+    setShowMainWindow(true);
 }
+
+bool ToyButton::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+        action();
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
+
 
 ToyWindow *toys;
 
@@ -61,7 +78,8 @@ void toy_button_init(){
         settings.beginGroup(str);
         QString icon = settings.value("icon").toString();
         toys->buttons[str] = new ToyButton(toys, icon);
-        toys->buttons[str]->command = settings.value("command").toString();
+        toys->buttons[str]->actionValue = settings.value("value").toString();
+        toys->buttons[str]->type = settings.value("type").toString();
         settings.endGroup();
 
     }

@@ -8,6 +8,8 @@
 
 #include "toy.h"
 
+#include <linux/uinput.h>
+
 #include <stdio.h>
 
 
@@ -43,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void MainWindow::onButtonClicked() {
-    doRightClick();
+    doRightClick(BTN_RIGHT);
 }
 
 void MainWindow::longPressDetect(){

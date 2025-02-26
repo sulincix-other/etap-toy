@@ -11,6 +11,8 @@
 #include <unistd.h>
 #include <linux/uinput.h>
 
+static int click_button = BTN_RIGHT;
+
 class RightClick : public QMainWindow {
 
 public:
@@ -53,10 +55,10 @@ public:
             uinput_send(EV_ABS, ABS_X, (x *3840) / screen->size().width());
             uinput_send(EV_ABS, ABS_Y, (y * 2160) / screen->size().height());
             // execute right click down
-            uinput_send(EV_KEY, BTN_RIGHT, 1);
+            uinput_send(EV_KEY, click_button, 1);
             usleep(100000);
             // execute right click up
-            uinput_send(EV_KEY, BTN_RIGHT, 0);
+            uinput_send(EV_KEY, click_button, 0);
         }
         return QMainWindow::eventFilter(obj, event);
     }
@@ -74,6 +76,7 @@ void right_click_init(){
     rc = new RightClick();
 }
 
-void doRightClick(){
+void doRightClick(int but){
+    click_button = but;
     rc->show();
 }

@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 
-#define LONG_PRESS_TIMEOUT 1299
+#define LONG_PRESS_TIMEOUT 450
 
 class MainWindow : public QMainWindow {
 
