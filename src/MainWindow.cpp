@@ -12,7 +12,6 @@
 
 
 float scale = 1;
-#define butsize 48 * scale
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QScreen *screen = QGuiApplication::primaryScreen();

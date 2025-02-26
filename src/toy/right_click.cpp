@@ -69,11 +69,11 @@ private:
 };
 
 static RightClick *rc;
-extern "C" {
-    void right_click_init(){
-        rc = new RightClick();
-    }
+
+void right_click_init(){
+    rc = new RightClick();
 }
+
 void doRightClick(){
     rc->show();
 }
