@@ -27,8 +27,6 @@ ToyWindow::ToyWindow(QWidget *parent) : QMainWindow(parent) {
         QString("border-radius: ")+QString::number(butsize*2)+QString("px;")
     );
     move->setFixedSize(butsize*4, butsize*4);
-
-    show();
 }
 
 
@@ -56,5 +54,8 @@ void toy_button_init(){
 }
 
 void doLongPress(){
+    if(toys != nullptr){
+        toys->show();
+    }
     puts("Long press!");
 }

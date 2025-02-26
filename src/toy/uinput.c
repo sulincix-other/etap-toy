@@ -44,7 +44,6 @@ void uinput_send(int type, int code, int value){
         perror("send");
         uinput_close();
         uinput_init();
-        uinput_send(type, code, value);
     }
 }
 
