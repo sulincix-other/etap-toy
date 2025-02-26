@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 
+#define MOVE_TRESHOLD butsize / 3
 
 float scale = 1;
 
@@ -57,10 +58,12 @@ void MainWindow::longPressDetect(){
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     pressed = (event->type() == QEvent::MouseButtonPress);
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
     if (event->type() == QEvent::MouseButtonPress) {
         _time = time(NULL);
         // long press detection
         timer->start(LONG_PRESS_TIMEOUT);
+        lastPos = mouseEvent->globalPosition();
     } else if (event->type() == QEvent::MouseButtonRelease) {
         if (time(NULL) - _time < 150 && !long_pressed) {
             onButtonClicked();
@@ -68,18 +71,16 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
         long_pressed = false;
         timer->stop();
     } else if (event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        _time = 0;
-        if (mouseEvent->buttons() & Qt::LeftButton) {
-            QPoint newpos = mouseEvent->globalPosition().toPoint() - QPoint(width() / 2, height() / 2);
-            move(newpos);
-            if(toys !=nullptr){
-                toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
-            }
-            return true;
+        QPoint newpos = mouseEvent->globalPosition().toPoint() - QPoint(width() / 2, height() / 2);
+        move(newpos);
+        if(toys !=nullptr){
+            toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
         }
-        long_pressed = false;
-        timer->stop();
+        if (QLineF(lastPos, mouseEvent->globalPosition()).length() > MOVE_TRESHOLD){
+            _time = 0;
+            long_pressed = false;
+            timer->stop();
+        }
     }
     return QMainWindow::eventFilter(obj, event);
 }

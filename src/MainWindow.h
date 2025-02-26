@@ -21,6 +21,7 @@ private slots:
 private:
     int _time;
     QTimer *timer;
+    QPointF lastPos;
     bool pressed = false;
     bool long_pressed = false;
 };
