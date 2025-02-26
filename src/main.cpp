@@ -3,7 +3,10 @@
 
 extern "C" {
     extern void ctx_init();
+    void setShowMainWindow(bool state);
 }
+
+static MainWindow *window;
 
 int main(int argc, char *argv[]) {
     setenv("QT_QPA_PLATFORM", "xcb;wayland",1);
@@ -13,8 +16,16 @@ int main(int argc, char *argv[]) {
     setenv("QT_SCALE_FACTOR", "1", 1);
 
     QApplication app(argc, argv);
-    MainWindow window;
+    window = new MainWindow();
     ctx_init();
-    window.show();
+    window->show();
     return app.exec();
+}
+
+void setShowMainWindow(bool state){
+    if(state){
+        window->show();
+    } else {
+        window->hide();
+    }
 }

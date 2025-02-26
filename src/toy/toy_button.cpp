@@ -55,6 +55,7 @@ void toy_button_init(){
 
 void doLongPress(){
     if(toys != nullptr){
+        setShowMainWindow(false);
         toys->show();
     }
     puts("Long press!");
