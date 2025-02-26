@@ -16,7 +16,11 @@ src = [
 
 src += run_command('find', 'src/toy','-type','f' , '-iname', '*.c*' ,check:true).stdout().strip().split('\n')
 
-# Qt5 dependencies
+# Extra warning as error
+add_project_arguments('-Wall', '-Wextra', '-Werror', language: 'cpp')
+
+
+# Qt6 dependencies
 qt6_dep = [
     dependency('Qt6Core'),
     dependency('Qt6Gui'),

@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+
+#define LONG_PRESS_TIMEOUT 1299
 
 class MainWindow : public QMainWindow {
 
@@ -13,9 +16,13 @@ protected:
 
 private slots:
     void onButtonClicked();
+    void longPressDetect();
 
 private:
     int _time;
+    QTimer *timer;
+    bool pressed = false;
+    bool long_pressed = false;
 };
 
 #endif // MAINWINDOW_H

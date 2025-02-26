@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <QPainter>
 #include <QMap>
+#include <stdio.h>
 
 #include "../toy.h"
 
@@ -13,6 +14,11 @@ ToyButton::ToyButton(QWidget *parent) : QWidget(parent) {
 
 extern "C" {
     void toy_button_init(){
-        
+        ToyButton *toy = new ToyButton(NULL);
+        (void)toy;
     }
+}
+
+void doLongPress(){
+    puts("Long press!");
 }
