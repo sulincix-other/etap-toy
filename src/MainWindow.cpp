@@ -69,7 +69,11 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         _time = 0;
         if (mouseEvent->buttons() & Qt::LeftButton) {
-            move(mouseEvent->globalPosition().toPoint() - QPoint(width() / 2, height() / 2));
+            QPoint newpos = mouseEvent->globalPosition().toPoint() - QPoint(width() / 2, height() / 2);
+            move(newpos);
+            if(toys !=nullptr){
+                toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
+            }
             return true;
         }
         long_pressed = false;
