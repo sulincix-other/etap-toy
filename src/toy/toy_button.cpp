@@ -7,6 +7,8 @@
 #include <QMap>
 #include <stdio.h>
 
+#include <math.h>
+
 #include "../toy.h"
 
 ToyWindow::ToyWindow(QWidget *parent) : QMainWindow(parent) {
@@ -31,14 +33,18 @@ ToyWindow::ToyWindow(QWidget *parent) : QMainWindow(parent) {
 
 
 ToyButton::ToyButton(QWidget *parent, QString path) : QWidget(parent) {
-    QLabel *img = new QLabel("", this);
+    img = new QLabel("", this);
     img->setStyleSheet(QString("background-color: none;"));
     img->setFixedSize(butsize, butsize);
     setFixedSize(butsize, butsize);
+    setImage(path);
+    show();
+}
+
+void ToyButton::setImage(QString path) {
     QIcon icon = QIcon(path);
     QPixmap pixmap = icon.pixmap(icon.actualSize(QSize(butsize, butsize)));
     img->setPixmap(pixmap);
-    show();
 }
 
 void ToyButton::dummy(){
@@ -50,7 +56,24 @@ ToyWindow *toys;
 void toy_button_init(){
     toys = new ToyWindow(NULL);
     toys->buttons["test"] = new ToyButton(toys, ":images/move-icon.svg");
-    toys->buttons["test"]->dummy();
+    toys->buttons["test2"] = new ToyButton(toys, ":images/move-icon.svg");
+    toys->buttons["test3"] = new ToyButton(toys, ":images/move-icon.svg");
+    toys->buttons["test4"] = new ToyButton(toys, ":images/move-icon.svg");
+    toys->buttons["test5"] = new ToyButton(toys, ":images/move-icon.svg");
+    toys->buttons["test6"] = new ToyButton(toys, ":images/move-icon.svg");
+    toy_reload();
+}
+
+void toy_reload(){
+    float total = toys->buttons.count();
+    float i=0;
+    for (auto it = toys->buttons.begin(); it != toys->buttons.end(); ++it) {
+        int x = butsize*2 + (sin((2*i*M_PI) / total) * butsize * 1.2) - (butsize/2);
+        int y = butsize*2 + (cos((2*i*M_PI) / total) * butsize * 1.2) - (butsize/2);
+        printf("%f %f %f\n", total, i, M_PI);
+        toys->buttons[it.key()]->move(x,y);
+        i++;
+    }
 }
 
 void doLongPress(){
