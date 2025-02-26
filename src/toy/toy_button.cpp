@@ -7,6 +7,8 @@
 #include <QMap>
 #include <stdio.h>
 
+#include <linux/uinput.h>
+
 #include <math.h>
 
 #include "../toy.h"
@@ -53,7 +55,13 @@ void ToyButton::action(){
     if(type == "command"){
         system((actionValue+"&").toStdString().c_str());
     } else if(type == "click"){
-        doRightClick(actionValue.toInt());
+        if(actionValue == "right"){
+            doRightClick(BTN_RIGHT);
+        } else if(actionValue == "middle"){
+            doRightClick(BTN_MIDDLE);
+        } else if(actionValue == "left"){
+            doRightClick(BTN_LEFT);
+        }
     }
     toys->hide();
     setShowMainWindow(true);
