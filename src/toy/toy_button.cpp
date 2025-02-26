@@ -55,12 +55,16 @@ ToyWindow *toys;
 
 void toy_button_init(){
     toys = new ToyWindow(NULL);
-    toys->buttons["test"] = new ToyButton(toys, ":images/move-icon.svg");
-    toys->buttons["test2"] = new ToyButton(toys, ":images/move-icon.svg");
-    toys->buttons["test3"] = new ToyButton(toys, ":images/move-icon.svg");
-    toys->buttons["test4"] = new ToyButton(toys, ":images/move-icon.svg");
-    toys->buttons["test5"] = new ToyButton(toys, ":images/move-icon.svg");
-    toys->buttons["test6"] = new ToyButton(toys, ":images/move-icon.svg");
+    QSettings settings("/etc/etap-toy.conf", QSettings::IniFormat);
+    const QStringList childGroups = settings.childGroups();
+    foreach (const QString &str, childGroups){
+        settings.beginGroup(str);
+        QString icon = settings.value("icon").toString();
+        toys->buttons[str] = new ToyButton(toys, icon);
+        toys->buttons[str]->command = settings.value("command").toString();
+        settings.endGroup();
+
+    }
     toy_reload();
 }
 

@@ -10,6 +10,7 @@ public:
     ToyButton(QWidget *parent, QString path);
     void dummy();
     void setImage(QString path);
+    QString command;
 private:
     QLabel *img;
 };
