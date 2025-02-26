@@ -55,7 +55,7 @@ ToyWindow *toys;
 
 void toy_button_init(){
     toys = new ToyWindow(NULL);
-    QSettings settings("/etc/etap-toy.conf", QSettings::IniFormat);
+    QSettings settings(":/etap-toy.conf", QSettings::IniFormat);
     const QStringList childGroups = settings.childGroups();
     foreach (const QString &str, childGroups){
         settings.beginGroup(str);

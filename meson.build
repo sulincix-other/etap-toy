@@ -50,5 +50,4 @@ executable('uinput-etap', ['src/uinput_service.c'], dependencies: uinput_dep,  i
 install_data('data/tr.org.etap.toy.svg', install_dir : icondir)
 install_data('data/uinput-etap.initd', install_dir : '/etc/init.d/', rename: 'uinput-etap', install_mode: 'rwxr-xr-x')
 install_data('data/tr.org.etap.toy.desktop', install_dir : desktopdir)
-install_data('data/etap-toy.conf', install_dir : '/etc')
 
