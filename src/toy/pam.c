@@ -7,6 +7,8 @@
 
 static char* conv_pass;
 
+int (*pam_show_cb)(const char* msg) = puts;
+
 static int conversation(int num_msg, const struct pam_message **msg, 
                         struct pam_response **resp, void *appdata_ptr) {
     // Allocate memory for responses
@@ -16,6 +18,8 @@ static int conversation(int num_msg, const struct pam_message **msg,
     }
 
     for (int i = 0; i < num_msg; i++) {
+        pam_show_cb(msg[i]->msg);
+        puts(msg[i]->msg);
         (*resp)[i].resp = strdup(conv_pass); // Replace with dynamic input if needed
         (*resp)[i].resp_retcode = 0; // Set return code
     }
@@ -35,7 +39,7 @@ bool pam_auth(const char *username, const char *password) {
     int retval;
 
     // Start PAM transaction
-    retval = pam_start("login", username, &conv, &pamh);
+    retval = pam_start("su", username, &conv, &pamh);
     if (retval != PAM_SUCCESS) {
         fprintf(stderr, "pam_start failed: %s\n", pam_strerror(pamh, retval));
         return false;
@@ -50,6 +54,7 @@ bool pam_auth(const char *username, const char *password) {
         printf("Authentication successful!\n");
     } else {
         fprintf(stderr, "Authentication failed: %s\n", pam_strerror(pamh, retval));
+        pam_show_cb(pam_strerror(pamh, retval));
     }
 
     // End PAM transaction
