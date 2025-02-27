@@ -88,7 +88,7 @@ public:
         std::string passwordString = passwordLineEdit->text().toStdString();
         const char* password = passwordString.c_str();
         bool isOk = false;
-        if (totp_auth("amogus",password)){
+        if (auth_totp()){
             isOk = true;
         }else if (pam_auth(username, password)) {
             isOk = true;
@@ -100,6 +100,14 @@ public:
             setShowMainWindow(true);
         }
         passwordLineEdit->setText("");
+    }
+
+    bool auth_totp(){
+        QProcess process;
+        process.start("etap-totp", QStringList() << passwordLineEdit->text());
+        process.waitForFinished();
+        return process.exitCode() == 0;
+
     }
 
     int updateLabel(const char* msg) {

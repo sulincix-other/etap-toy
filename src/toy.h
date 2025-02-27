@@ -6,7 +6,6 @@ extern float scale;
 #include "toy/toy_button.h"
 #include "toy/right_click.h"
 #include "toy/lock_screen.h"
-#include "toy/cotp.h"
 
 extern "C" {
     void ctx_init();
