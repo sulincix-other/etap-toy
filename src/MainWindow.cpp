@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void MainWindow::onButtonClicked() {
+    setShowMainWindow(false);
     doRightClick(BTN_RIGHT);
 }
 

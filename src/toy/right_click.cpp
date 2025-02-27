@@ -59,6 +59,7 @@ public:
             usleep(100000);
             // execute right click up
             uinput_send(EV_KEY, click_button, 0);
+            setShowMainWindow(true);
         }
         return QMainWindow::eventFilter(obj, event);
     }
