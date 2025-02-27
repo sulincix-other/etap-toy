@@ -92,6 +92,8 @@ public:
         } else {
             updateLabel("Incorrect password. Please try again.");
         }
+        passwordLineEdit->setText("");
+        
     }
 
     int updateLabel(const char* msg) {
