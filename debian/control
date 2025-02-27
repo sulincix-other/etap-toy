@@ -7,6 +7,8 @@ Build-Depends: meson, ninja-build,
          qtchooser,
          qt6-svg-dev,
          pkgconf,
+         libcotp-dev,
+         libpam-dev,
          libevdev-dev
 Standards-Version: 4.3.0
 Homepage: https://pardus.org.tr

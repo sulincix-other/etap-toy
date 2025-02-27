@@ -50,17 +50,21 @@ char* readfile(char* path) {
 int main(int argc, char** argv){
     char* secret = readfile("/etc/etap.secret");
     if(!secret){
-        fprintf(stderr, "Warning: %s\n","secret not found.");
+        setuid(0);
+        fprintf(stderr, "Error: %s\n","secret not found.");
+        system("uuidgen | base32 > /etc/etap.secret; chmod 700 /etc/etap.secret ; chown root:root /etc/etap.secret");
         return 1;
     }
     if (argc < 2){
-        fprintf(stderr, "Warning: %s\n","token not found.");
+        fprintf(stderr, "Error: %s\n","token not found.");
         return 1;
     }
     if (strlen(argv[1]) != 6){
-        fprintf(stderr, "Warning: %s\n","invalid token.");
+        fprintf(stderr, "Error: %s\n","invalid token.");
         return 1;
     }
+    // read /etc/etap.secret as root
+    setuid(0);
     if (totp_auth(secret, argv[1])){
         fprintf(stderr, "Authentication Successfully\n");
         return 0;

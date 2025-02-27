@@ -4,3 +4,4 @@ if systemctl >/dev/null; then
 elif command -v update-rc.d >/dev/null; then
     update-rc.d uinput-etap enable
 fi
+chmod 4755 /usr/bin/etap-totp
