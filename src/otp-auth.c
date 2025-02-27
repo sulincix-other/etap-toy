@@ -52,11 +52,10 @@ int main(int argc, char** argv){
     if(!secret){
         setuid(0);
         fprintf(stderr, "Error: %s\n","secret not found.");
-        system("uuidgen | base32 > /etc/etap.secret;");
-        system("; chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
+        system("head -c 10 /dev/urandom | base32 > /etc/etap.secret;");
+        system("chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
         return 1;
     }
-    system("; chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
     if (argc < 2){
         fprintf(stderr, "Error: %s\n","token not found.");
         return 1;
@@ -67,6 +66,7 @@ int main(int argc, char** argv){
     }
     // read /etc/etap.secret as root
     setuid(0);
+    system("chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
     if (totp_auth(secret, argv[1])){
         fprintf(stderr, "Authentication Successfully\n");
         return 0;
