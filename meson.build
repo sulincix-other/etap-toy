@@ -21,10 +21,12 @@ add_project_arguments('-Wall', '-Wextra', '-Werror', language: 'cpp')
 
 
 # Qt6 dependencies
-qt6_dep = [
+main_dep = [
     dependency('Qt6Core'),
     dependency('Qt6Gui'),
     dependency('Qt6Widgets'),
+    dependency('pam'),
+    dependency('pam_misc'),
 ]
 
 uinput_dep = [
@@ -43,7 +45,7 @@ add_project_arguments('-fpermissive', language: 'cpp')
 add_project_arguments('-fPIC', language: 'cpp')
 
 # executable file
-executable('etap-toy', src, dependencies: qt6_dep, install: true)
+executable('etap-toy', src, dependencies: main_dep, install: true)
 executable('uinput-etap', ['src/uinput_service.c'], dependencies: uinput_dep,  install: true, install_dir: libexecdir)
 
 # data file
