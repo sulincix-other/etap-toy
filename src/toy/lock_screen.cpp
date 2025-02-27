@@ -87,14 +87,19 @@ public:
         const char* username = getenv("USER");
         std::string passwordString = passwordLineEdit->text().toStdString();
         const char* password = passwordString.c_str();
-        if (pam_auth(username, password)) {
-            hide();
-            setShowMainWindow(true);
+        bool isOk = false;
+        if (totp_auth("amogus",password)){
+            isOk = true;
+        }else if (pam_auth(username, password)) {
+            isOk = true;
         } else {
             updateLabel("Incorrect password. Please try again.");
         }
+        if (isOk){
+            hide();
+            setShowMainWindow(true);
+        }
         passwordLineEdit->setText("");
-        
     }
 
     int updateLabel(const char* msg) {
