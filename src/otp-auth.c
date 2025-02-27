@@ -52,9 +52,11 @@ int main(int argc, char** argv){
     if(!secret){
         setuid(0);
         fprintf(stderr, "Error: %s\n","secret not found.");
-        system("uuidgen | base32 > /etc/etap.secret; chmod 700 /etc/etap.secret ; chown root:root /etc/etap.secret");
+        system("uuidgen | base32 > /etc/etap.secret;");
+        system("; chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
         return 1;
     }
+    system("; chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
     if (argc < 2){
         fprintf(stderr, "Error: %s\n","token not found.");
         return 1;
