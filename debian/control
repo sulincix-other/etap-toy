@@ -5,7 +5,9 @@ Maintainer: Ali Rıza KESKİN <ali.riza.keskin@pardus.org.tr>
 Build-Depends: meson, ninja-build,
          qt6-base-dev,
          qtchooser,
-         qt6-svg-dev
+         qt6-svg-dev,
+         pkgconf,
+         libevdev-dev
 Standards-Version: 4.3.0
 Homepage: https://pardus.org.tr
 

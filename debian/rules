@@ -1,7 +1,9 @@
 #!/usr/bin/make -f
 
+
 %:
-	dh $@ --buildsystem=meson
+	PATH=/usr/lib/qt6/libexec/:$$PATH \
+	    dh $@ --buildsystem=meson
 
 override_dh_auto_configure:
 	dh_auto_configure -- 
