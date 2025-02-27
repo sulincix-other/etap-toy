@@ -42,7 +42,7 @@ public:
         area->setFixedSize(screen->size().width(), screen->size().height());
     }
 
-    bool eventFilter(QObject *obj, QEvent *event) {
+    bool eventFilter(QObject *obj, QEvent *event) override {
         if (event->type() == QEvent::MouseButtonRelease) {
             // Read mouse release event
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

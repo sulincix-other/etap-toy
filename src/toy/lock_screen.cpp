@@ -85,7 +85,8 @@ public:
 
     void auth() {
         const char* username = getenv("USER");
-        const char* password = passwordLineEdit->text().toStdString().c_str();
+        std::string passwordString = passwordLineEdit->text().toStdString();
+        const char* password = passwordString.c_str();
         if (pam_auth(username, password)) {
             hide();
             setShowMainWindow(true);
