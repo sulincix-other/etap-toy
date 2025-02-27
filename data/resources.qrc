@@ -1,6 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>images/move-icon.svg</file>
+        <file>images/expo.svg</file>
+        <file>images/right-click.svg</file>
+        <file>images/lock-screen.svg</file>
+        <file>images/keyboard.svg</file>
         <file>etap-toy.conf</file>
     </qresource>
 </RCC>

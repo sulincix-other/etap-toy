@@ -26,8 +26,8 @@ ToyWindow::ToyWindow(QWidget *parent) : QMainWindow(parent) {
 
     QLabel *move = new QLabel("", this);
     move->setStyleSheet(
-        QString("background-color: #31313131;") +
-        QString("border: 3px solid #31696969;") +
+        QString("background-color: #69313131;") +
+        QString("border: 3px solid #69696969;") +
         QString("border-radius: ")+QString::number(butsize*2)+QString("px;")
     );
     move->setFixedSize(butsize*4, butsize*4);
