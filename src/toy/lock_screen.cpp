@@ -25,42 +25,57 @@ public:
     QLineEdit *passwordLineEdit;
 
     LockScreen() {
-        this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-        this->setAttribute(Qt::WA_TranslucentBackground);
-        
-        screen = QGuiApplication::primaryScreen();
-        this->setFixedSize(screen->size());
-        
-        area = new QWidget(this);
-        area->setStyleSheet("background-color: black"); // Semi-transparent background
-        area->setFixedSize(screen->size());
-        
-        dialog = new QWidget(area);
-        dialog->setStyleSheet("background-color: #ff313131; border-radius: 10px;"); // Rounded corners
-        dialog->setFixedSize(400, 200); // Fixed size for the dialog
-        dialog->move((screen->size().width() - dialog->size().width()) / 2,
-                     (screen->size().height() - dialog->size().height()) / 2);
+    this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    
+    screen = QGuiApplication::primaryScreen();
+    this->setFixedSize(screen->size());
+    
+    area = new QWidget(this);
+    area->setStyleSheet("background-color: black"); // Semi-transparent background
+    area->setFixedSize(screen->size());
+    
+    dialog = new QWidget(area);
+    dialog->setStyleSheet("background-color: #ff313131; border-radius: 10px;"); // Rounded corners
+    dialog->setFixedSize(400, 200); // Fixed size for the dialog
+    dialog->move((screen->size().width() - dialog->size().width()) / 2,
+                 (screen->size().height() - dialog->size().height()) / 2);
 
-        label = new QLabel("");
-        label->setAlignment(Qt::AlignCenter);
-        label->setStyleSheet("color: red;"); // Error message color
+    label = new QLabel("");
+    label->setAlignment(Qt::AlignCenter);
+    label->setStyleSheet("color: red;"); // Error message color
 
-        passwordLineEdit = new QLineEdit();
-        passwordLineEdit->setEchoMode(QLineEdit::Password);
-        passwordLineEdit->setPlaceholderText("Enter Password");
-        passwordLineEdit->setStyleSheet("color: white;");
+    passwordLineEdit = new QLineEdit();
+    passwordLineEdit->setEchoMode(QLineEdit::Password);
+    passwordLineEdit->setPlaceholderText("Enter Password");
+    passwordLineEdit->setStyleSheet("color: white;");
 
-        QPushButton *okButton = new QPushButton("Unlock");
-        okButton->setStyleSheet("background-color: #4CAF50; color: black; border: none; border-radius: 5px; padding: 10px;");
+    QPushButton *okButton = new QPushButton("Unlock");
+    okButton->setStyleSheet("background-color: #4CAF50; color: black; border: none; border-radius: 5px; padding: 10px;");
 
-        connect(okButton, &QPushButton::clicked, this, &LockScreen::auth);
+    connect(okButton, &QPushButton::clicked, this, &LockScreen::auth);
 
-        QVBoxLayout *mainLayout = new QVBoxLayout;
-        mainLayout->addWidget(passwordLineEdit);
-        mainLayout->addWidget(okButton);
-        mainLayout->addWidget(label);
-        dialog->setLayout(mainLayout);
+
+    QPushButton *kbdButton = new QPushButton("Kbd");
+    kbdButton->setFixedSize(80*scale, 30*scale);
+    kbdButton->setStyleSheet("background-color: #2196F3; color: white; border: none; border-radius: 5px; padding: 5px;");
+
+
+    connect(kbdButton, &QPushButton::clicked, this, &LockScreen::openEtaKeyboard);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(passwordLineEdit);
+    mainLayout->addWidget(okButton);
+    mainLayout->addWidget(label);
+    mainLayout->addWidget(kbdButton); // Add the command button to the layout
+    dialog->setLayout(mainLayout);
     }
+
+    // Example slot for the command button
+    void openEtaKeyboard() {
+        system("eta-keyboard show &");
+    }
+
 
     void resizeEvent(QResizeEvent *event) override {
         (void)event;
