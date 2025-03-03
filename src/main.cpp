@@ -1,6 +1,12 @@
 #include <QApplication>
 #include "MainWindow.h"
 
+#include <stdlib.h>
+#include <locale.h>
+#include <libintl.h>
+
+#define _(String) gettext(String)
+
 extern "C" {
     extern void ctx_init();
     void setShowMainWindow(bool state);

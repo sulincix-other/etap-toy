@@ -1,8 +1,10 @@
-project('example', 'cpp', 'c')
+project('etap-toy', 'cpp', 'c')
 
 icondir = get_option('prefix')/'share/icons/hicolor/scalable/apps'
 desktopdir = get_option('prefix')/'share/applications'
 libexecdir = get_option('prefix')/'libexec'
+
+subdir('po')
 
 # Generate ctx.cpp
 run_command('bash', './tools/mkctx.sh', meson.current_build_dir(), check:true)

@@ -50,14 +50,14 @@ public:
 
     passwordLineEdit = new QLineEdit();
     passwordLineEdit->setEchoMode(QLineEdit::Password);
-    passwordLineEdit->setPlaceholderText("Enter Password");
+    passwordLineEdit->setPlaceholderText(_("Enter Password"));
     passwordLineEdit->setStyleSheet(
         "background-color: #313131;"
         "color: white;"
         "font-size: "+QString::number(18*scale)+"px;"
     );
 
-    QPushButton *okButton = new QPushButton("Unlock");
+    QPushButton *okButton = new QPushButton(_("Unlock"));
     okButton->setStyleSheet(
         "background-color: #4CAF50;"
         "color: black;"
@@ -118,7 +118,7 @@ public:
         }else if (pam_auth(username, password)) {
             isOk = true;
         } else {
-            updateLabel("Incorrect password. Please try again.");
+            updateLabel(_("Incorrect password. Please try again."));
         }
         if (isOk){
             hide();

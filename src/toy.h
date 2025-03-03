@@ -2,6 +2,11 @@ extern float scale;
 
 #define butsize 48 * scale
 
+#include <stdlib.h>
+#include <locale.h>
+#include <libintl.h>
+
+#define _(String) gettext(String)
 
 #include "toy/toy_button.h"
 #include "toy/right_click.h"
