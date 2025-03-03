@@ -39,7 +39,7 @@ cotp_dep = []
 cotp = dependency('cotp', required:false)
 if cotp.found()
     cotp_dep += cotp
-    add_project_arguments('-DCOTP')
+    add_project_arguments('-DCOTP', language: 'cpp')
 endif
 
 
