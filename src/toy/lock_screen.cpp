@@ -36,7 +36,7 @@ public:
     area->setFixedSize(screen->size());
 
     dialog = new QWidget(area);
-    dialog->setStyleSheet("background-color: #ff313131; border-radius: 10px;"); // Rounded corners
+    dialog->setStyleSheet("background-color: #ff313131; border-radius: "+QString::number(10*scale)+"px;"); // Rounded corners
     dialog->setFixedSize(400*scale, 200*scale); // Fixed size for the dialog
     dialog->move((screen->size().width() - dialog->size().width()) / 2,
                  (screen->size().height() - dialog->size().height()) / 2);
@@ -52,9 +52,10 @@ public:
     passwordLineEdit->setEchoMode(QLineEdit::Password);
     passwordLineEdit->setPlaceholderText(_("Enter Password"));
     passwordLineEdit->setStyleSheet(
-        "background-color: #313131;"
+        "background-color: #232323;"
         "color: white;"
         "font-size: "+QString::number(18*scale)+"px;"
+        "padding: "+QString::number(10*scale)+"px;"
     );
 
     QPushButton *okButton = new QPushButton(_("Unlock"));
@@ -63,22 +64,25 @@ public:
         "color: black;"
         "border: none;"
         "font-size: "+QString::number(18*scale)+"px;"
-        "border-radius: 5px;"
-        "padding: 10px;"
+        "border-radius: "+QString::number(5*scale)+"px;"
+        "padding: "+QString::number(10*scale)+"px;"
     );
 
     connect(okButton, &QPushButton::clicked, this, &LockScreen::auth);
 
 
-    QPushButton *kbdButton = new QPushButton("Kbd");
-    kbdButton->setFixedSize(80*scale, 30*scale);
+    QPushButton *kbdButton = new QPushButton("");
+    QIcon icon = QIcon(":images/move-icon.svg");
+    kbdButton->setIcon(icon);
+    kbdButton->setIconSize(QSize(butsize, butsize));
+    kbdButton->setFixedSize(butsize*1.3, butsize*1.2);
     kbdButton->setStyleSheet(
         "background-color: #2196F3;"
         "color: white;"
         "border: none;"
         "font-size: "+QString::number(18*scale)+"px;"
-        "border-radius: 5px;"
-        "padding: 5px;"
+        "border-radius: "+QString::number(5*scale)+"px;"
+        "padding: "+QString::number(10*scale)+"px;"
     );
 
 
