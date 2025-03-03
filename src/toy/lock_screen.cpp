@@ -72,7 +72,7 @@ public:
 
 
     QPushButton *kbdButton = new QPushButton("");
-    QIcon icon = QIcon(":images/move-icon.svg");
+    QIcon icon = QIcon(":images/keyboard.svg");
     kbdButton->setIcon(icon);
     kbdButton->setIconSize(QSize(butsize, butsize));
     kbdButton->setFixedSize(butsize*1.3, butsize*1.2);
