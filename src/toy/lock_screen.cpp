@@ -103,11 +103,14 @@ public:
     }
 
     bool auth_totp(){
+#ifdef COTP
         QProcess process;
         process.start("etap-totp", QStringList() << passwordLineEdit->text());
         process.waitForFinished();
         return process.exitCode() == 0;
-
+#else
+       return false;
+#endif
     }
 
     int updateLabel(const char* msg) {

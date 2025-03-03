@@ -33,9 +33,13 @@ uinput_dep = [
     dependency('libevdev')
 ]
 
-cotp_dep = [
-    dependency('cotp')
-]
+cotp_dep = []
+cotp = dependency('cotp', required:false)
+if cotp.found()
+    cotp_dep += cotp
+    add_project_arguments('-DCOTP')
+endif
+
 
 rcc_args = ['rcc', './data/resources.qrc', '-o', meson.current_build_dir()/'resources.cpp']
 run_command(rcc_args, check:true)
@@ -51,7 +55,9 @@ add_project_arguments('-fPIC', language: 'cpp')
 # executable file
 executable('etap-toy', src, dependencies: main_dep, install: true)
 executable('uinput-etap', ['src/uinput_service.c'], dependencies: uinput_dep,  install: true, install_dir: libexecdir)
-executable('etap-totp', ['src/otp-auth.c'], dependencies: cotp_dep,  install: true)
+if cotp.found()
+    executable('etap-totp', ['src/otp-auth.c'], dependencies: cotp_dep,  install: true)
+endif
 
 # data file
 install_data('data/tr.org.etap.toy.svg', install_dir : icondir)
