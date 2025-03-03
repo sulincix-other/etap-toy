@@ -37,28 +37,49 @@ public:
 
     dialog = new QWidget(area);
     dialog->setStyleSheet("background-color: #ff313131; border-radius: 10px;"); // Rounded corners
-    dialog->setFixedSize(400, 200); // Fixed size for the dialog
+    dialog->setFixedSize(400*scale, 200*scale); // Fixed size for the dialog
     dialog->move((screen->size().width() - dialog->size().width()) / 2,
                  (screen->size().height() - dialog->size().height()) / 2);
 
     label = new QLabel("");
     label->setAlignment(Qt::AlignCenter);
-    label->setStyleSheet("color: red;"); // Error message color
+    label->setStyleSheet(
+        "color: red;"
+        "font-size: "+QString::number(18*scale)+"px;"
+    );
 
     passwordLineEdit = new QLineEdit();
     passwordLineEdit->setEchoMode(QLineEdit::Password);
     passwordLineEdit->setPlaceholderText("Enter Password");
-    passwordLineEdit->setStyleSheet("color: white;");
+    passwordLineEdit->setStyleSheet(
+        "background-color: #313131;"
+        "color: white;"
+        "font-size: "+QString::number(18*scale)+"px;"
+    );
 
     QPushButton *okButton = new QPushButton("Unlock");
-    okButton->setStyleSheet("background-color: #4CAF50; color: black; border: none; border-radius: 5px; padding: 10px;");
+    okButton->setStyleSheet(
+        "background-color: #4CAF50;"
+        "color: black;"
+        "border: none;"
+        "font-size: "+QString::number(18*scale)+"px;"
+        "border-radius: 5px;"
+        "padding: 10px;"
+    );
 
     connect(okButton, &QPushButton::clicked, this, &LockScreen::auth);
 
 
     QPushButton *kbdButton = new QPushButton("Kbd");
     kbdButton->setFixedSize(80*scale, 30*scale);
-    kbdButton->setStyleSheet("background-color: #2196F3; color: white; border: none; border-radius: 5px; padding: 5px;");
+    kbdButton->setStyleSheet(
+        "background-color: #2196F3;"
+        "color: white;"
+        "border: none;"
+        "font-size: "+QString::number(18*scale)+"px;"
+        "border-radius: 5px;"
+        "padding: 5px;"
+    );
 
 
     connect(kbdButton, &QPushButton::clicked, this, &LockScreen::openEtaKeyboard);
