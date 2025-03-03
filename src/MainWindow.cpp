@@ -41,7 +41,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(timer, &QTimer::timeout, this, [=](){longPressDetect();});
 
     installEventFilter(this);
-    this->move(0,0);
+    this->move(
+        (screen->size().width() - butsize) / 2,
+        (screen->size().height() - butsize) / 2
+    );
     show();
 }
 
