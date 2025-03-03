@@ -1,7 +1,7 @@
 project('etap-toy', 'cpp', 'c')
 
 icondir = get_option('prefix')/'share/icons/hicolor/scalable/apps'
-desktopdir = get_option('prefix')/'share/applications'
+desktopdir = '/etc/xdg/autostart'
 libexecdir = get_option('prefix')/'libexec'
 
 subdir('po')
