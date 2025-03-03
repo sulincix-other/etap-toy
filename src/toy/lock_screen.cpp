@@ -129,6 +129,7 @@ public:
             setShowMainWindow(true);
         }
         passwordLineEdit->setText("");
+        updateLabel("");
     }
 
     bool auth_totp(){
