@@ -27,14 +27,14 @@ public:
     LockScreen() {
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    
+
     screen = QGuiApplication::primaryScreen();
     this->setFixedSize(screen->size());
-    
+
     area = new QWidget(this);
     area->setStyleSheet("background-color: black"); // Semi-transparent background
     area->setFixedSize(screen->size());
-    
+
     dialog = new QWidget(area);
     dialog->setStyleSheet("background-color: #ff313131; border-radius: 10px;"); // Rounded corners
     dialog->setFixedSize(400, 200); // Fixed size for the dialog
@@ -62,6 +62,7 @@ public:
 
 
     connect(kbdButton, &QPushButton::clicked, this, &LockScreen::openEtaKeyboard);
+    connect(passwordLineEdit, &QLineEdit::returnPressed, this, &LockScreen::auth);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(passwordLineEdit);
@@ -85,6 +86,9 @@ public:
 
     void auth() {
         const char* username = getenv("USER");
+        if(username == nullptr){
+            return;
+        }
         std::string passwordString = passwordLineEdit->text().toStdString();
         const char* password = passwordString.c_str();
         bool isOk = false;
