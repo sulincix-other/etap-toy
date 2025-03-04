@@ -6,6 +6,8 @@ extern float scale;
 #include <locale.h>
 #include <libintl.h>
 
+#include <QSettings>
+
 #define _(String) gettext(String)
 
 #include "toy/toy_button.h"
@@ -18,6 +20,7 @@ extern "C" {
     void uinput_send(int type, int code, int value);
     bool pam_auth(const char *username, const char *password);
     bool totp_auth(const char *secret, const char *token);
+    extern QSettings *settings;
 
     extern int (*pam_show_cb)(const char* msg);
 }

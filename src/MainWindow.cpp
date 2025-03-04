@@ -41,10 +41,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(timer, &QTimer::timeout, this, [=](){longPressDetect();});
 
     installEventFilter(this);
-    this->move(
-        (screen->size().width() - butsize) / 2,
-        (screen->size().height() - butsize) / 2
-    );
+    do_move(settings->value("last-position").toPoint());
     show();
 }
 
@@ -60,6 +57,15 @@ void MainWindow::longPressDetect(){
     }
 }
 
+void MainWindow::do_move(QPoint newpos){
+    move(newpos);
+    if(toys != nullptr){
+        toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
+    }
+}
+
+#define newpos (mouseEvent->globalPosition().toPoint() - \
+    QPoint(width() / 2, height() / 2))
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     pressed = (event->type() == QEvent::MouseButtonPress);
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -75,8 +81,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
         }
         long_pressed = false;
         timer->stop();
+        if(settings != nullptr) {
+            settings->setValue("last-position", newpos);
+        }
     } else if (event->type() == QEvent::MouseMove) {
-        QPoint newpos = mouseEvent->globalPosition().toPoint() - QPoint(width() / 2, height() / 2);
         if (QLineF(lastPos, mouseEvent->globalPosition()).length() > MOVE_TRESHOLD){
             _time = 0;
             long_pressed = false;
@@ -84,10 +92,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
             move_lock = false;
         }
         if(!move_lock){
-            move(newpos);
-            if(toys !=nullptr){
-                toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
-            }
+            do_move(newpos);
         }
     }
     return QMainWindow::eventFilter(obj, event);
