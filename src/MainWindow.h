@@ -20,7 +20,7 @@ private slots:
     void longPressDetect();
 
 private:
-    int _time;
+    long _time;
     bool move_lock = true;
     QTimer *timer;
     QPointF lastPos;

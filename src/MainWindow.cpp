@@ -8,13 +8,22 @@
 
 #include "toy.h"
 
+#include <sys/time.h>
 #include <linux/uinput.h>
 
 #include <stdio.h>
 
 #define MOVE_TRESHOLD butsize
 
+
+static long utime() {
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    return tp.tv_sec * 1000 + tp.tv_usec / 1000;
+}
+
 float scale = 1;
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QScreen *screen = QGuiApplication::primaryScreen();
@@ -70,13 +79,14 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     pressed = (event->type() == QEvent::MouseButtonPress);
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
     if (event->type() == QEvent::MouseButtonPress) {
-        _time = time(NULL);
+        _time = utime();
         // long press detection
         timer->start(LONG_PRESS_TIMEOUT);
         move_lock = true;
         lastPos = mouseEvent->globalPosition();
     } else if (event->type() == QEvent::MouseButtonRelease) {
-        if (time(NULL) - _time < 150 && !long_pressed) {
+        float delay = utime() - _time;
+        if (delay < 150 && !long_pressed) {
             onButtonClicked();
         }
         long_pressed = false;
