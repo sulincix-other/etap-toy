@@ -60,7 +60,7 @@ void MainWindow::onButtonClicked() {
 }
 
 void MainWindow::longPressDetect(){
-    if(pressed){
+    if(move_lock){
         long_pressed = true;
         doLongPress();
     }
@@ -75,6 +75,7 @@ void MainWindow::do_move(QPoint newpos){
 
 #define newpos (mouseEvent->globalPosition().toPoint() - \
     QPoint(width() / 2, height() / 2))
+
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     pressed = (event->type() == QEvent::MouseButtonPress);
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
