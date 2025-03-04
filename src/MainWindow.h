@@ -20,6 +20,7 @@ private slots:
 
 private:
     int _time;
+    bool move_lock = true;
     QTimer *timer;
     QPointF lastPos;
     bool pressed = false;

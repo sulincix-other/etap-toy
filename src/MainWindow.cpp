@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 
-#define MOVE_TRESHOLD butsize / 3
+#define MOVE_TRESHOLD butsize
 
 float scale = 1;
 
@@ -67,6 +67,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
         _time = time(NULL);
         // long press detection
         timer->start(LONG_PRESS_TIMEOUT);
+        move_lock = true;
         lastPos = mouseEvent->globalPosition();
     } else if (event->type() == QEvent::MouseButtonRelease) {
         if (time(NULL) - _time < 150 && !long_pressed) {
@@ -76,14 +77,17 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
         timer->stop();
     } else if (event->type() == QEvent::MouseMove) {
         QPoint newpos = mouseEvent->globalPosition().toPoint() - QPoint(width() / 2, height() / 2);
-        move(newpos);
-        if(toys !=nullptr){
-            toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
-        }
         if (QLineF(lastPos, mouseEvent->globalPosition()).length() > MOVE_TRESHOLD){
             _time = 0;
             long_pressed = false;
             timer->stop();
+            move_lock = false;
+        }
+        if(!move_lock){
+            move(newpos);
+            if(toys !=nullptr){
+                toys->move(newpos - QPoint(toys->width() / 2, toys->height() / 2));
+            }
         }
     }
     return QMainWindow::eventFilter(obj, event);
