@@ -58,6 +58,7 @@ add_project_arguments('-fPIC', language: 'cpp')
 # executable file
 executable('etap-toy', src, dependencies: main_dep, install: true)
 executable('uinput-etap', ['src/uinput_service.c'], dependencies: uinput_dep,  install: true, install_dir: libexecdir)
+executable('uinput-etap-cli', ['src/uinput_client.c'], dependencies: uinput_dep,  install: true)
 if cotp.found()
     executable('etap-totp', ['src/otp-auth.c'], dependencies: cotp_dep,  install: true)
 endif
