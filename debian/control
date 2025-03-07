@@ -9,6 +9,8 @@ Build-Depends: meson, ninja-build,
          pkgconf,
          libcotp-dev,
          libpam-dev,
+         libaudit-dev,
+         libgcrypt20-dev,
          libevdev-dev
 Standards-Version: 4.3.0
 Homepage: https://pardus.org.tr
