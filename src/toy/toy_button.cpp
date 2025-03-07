@@ -53,7 +53,7 @@ void ToyButton::setImage(QString path) {
 void ToyButton::action(){
     puts(type.toStdString().c_str());
     if(type == "command"){
-        system((actionValue+"&").toStdString().c_str());
+        (void)system((actionValue+"&").toStdString().c_str());
         setShowMainWindow(true);
     } else if(type == "click"){
         if(actionValue == "right"){

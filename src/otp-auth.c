@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+ #include <unistd.h>
 
 #include <cotp.h>
 
@@ -52,8 +53,8 @@ int main(int argc, char** argv){
     if(!secret){
         setuid(0);
         fprintf(stderr, "Error: %s\n","secret not found.");
-        system("head -c 10 /dev/urandom | base32 > /etc/etap.secret;");
-        system("chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
+        (void)system("head -c 10 /dev/urandom | base32 > /etc/etap.secret;");
+        (void)system("chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
         return 1;
     }
     if (argc < 2){
@@ -65,8 +66,8 @@ int main(int argc, char** argv){
         return 1;
     }
     // read /etc/etap.secret as root
-    setuid(0);
-    system("chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
+    (void)setuid(0);
+    (void)system("chmod 600 /etc/etap.secret ; chown root:root /etc/etap.secret");
     if (totp_auth(secret, argv[1])){
         fprintf(stderr, "Authentication Successfully\n");
         return 0;

@@ -99,7 +99,7 @@ public:
 
     // Example slot for the command button
     void openEtaKeyboard() {
-        system("eta-keyboard show &");
+        (void)system("eta-keyboard show &");
     }
 
 
