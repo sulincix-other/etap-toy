@@ -55,6 +55,14 @@ void ToyButton::action(){
     if(type == "command"){
         (void)system((actionValue+"&").toStdString().c_str());
         setShowMainWindow(true);
+    } else if(type == "command-wait"){
+        QProcess *process = new QProcess();
+        QObject::connect(process, &QProcess::finished, [&](int exitCode, QProcess::ExitStatus exitStatus) {
+            (void)exitCode; (void)exitStatus;
+            printf("%d\n", exitCode);
+            setShowMainWindow(true);
+        });
+        process->start(actionValue);
     } else if(type == "click"){
         if(actionValue == "right"){
             doRightClick(BTN_RIGHT);

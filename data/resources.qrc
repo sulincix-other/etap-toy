@@ -5,6 +5,7 @@
         <file>images/right-click.svg</file>
         <file>images/lock-screen.svg</file>
         <file>images/keyboard.svg</file>
+        <file>images/xkill.svg</file>
         <file>etap-toy.conf</file>
     </qresource>
 </RCC>
