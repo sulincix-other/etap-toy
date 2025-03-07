@@ -20,6 +20,7 @@ src += run_command('find', 'src/toy','-type','f' , '-iname', '*.c*' ,check:true)
 
 # Extra warning as error
 add_project_arguments('-Wall', '-Wextra', '-Werror', language: 'cpp')
+add_project_arguments('-Wno-unused-result', language: 'cpp')
 
 
 # Qt6 dependencies
