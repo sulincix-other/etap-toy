@@ -27,6 +27,7 @@ add_project_arguments('-Wno-unused-result', language: 'cpp')
 main_dep = [
     dependency('Qt6Core'),
     dependency('Qt6Gui'),
+    dependency('Qt6Svg'),
     dependency('Qt6Widgets'),
     dependency('pam'),
     dependency('pam_misc'),

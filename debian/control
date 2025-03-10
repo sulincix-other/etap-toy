@@ -21,6 +21,8 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          libqt6svg6,
          libqt6core6,
-         libqt6gui6
+         libqt6gui6,
+         libqt6svg6,
+         libqt6svgwidgets6
 Description: Desktop toy for etap.
  An usefull toy for etap.
