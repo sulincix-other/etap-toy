@@ -78,6 +78,11 @@ void MainWindow::do_move(QPoint newpos){
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     pressed = (event->type() == QEvent::MouseButtonPress);
+    if(event->type() == QEvent::Hide || event->type() == QEvent::WindowStateChange){
+        hide();
+        show();
+    }
+    //printf("%d\n", event->type());
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
     if (event->type() == QEvent::MouseButtonPress) {
         _time = utime();
