@@ -11,6 +11,8 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     void do_move(QPoint newpos);
+    void setHide(bool status);
+    bool hide_lock = true;
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

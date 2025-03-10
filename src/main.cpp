@@ -45,9 +45,11 @@ int main(int argc, char *argv[]) {
 }
 
 void setShowMainWindow(bool state){
+    window->hide_lock = false;
     if(state){
         window->show();
     } else {
         window->hide();
     }
+    window->hide_lock = true;
 }

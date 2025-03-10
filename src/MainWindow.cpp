@@ -66,6 +66,16 @@ void MainWindow::longPressDetect(){
     }
 }
 
+void MainWindow::setHide(bool status){
+    hide_lock = false;
+    if(status){
+        hide();
+    } else {
+        show();
+    }
+    hide_lock = true;
+}
+
 void MainWindow::do_move(QPoint newpos){
     move(newpos);
     if(toys != nullptr){
@@ -79,8 +89,10 @@ void MainWindow::do_move(QPoint newpos){
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     pressed = (event->type() == QEvent::MouseButtonPress);
     if(event->type() == QEvent::Hide || event->type() == QEvent::WindowStateChange){
-        hide();
-        show();
+        if(hide_lock){
+            hide();
+            show();
+        }
     }
     //printf("%d\n", event->type());
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
