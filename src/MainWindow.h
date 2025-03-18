@@ -22,6 +22,7 @@ private slots:
     void longPressDetect();
 
 private:
+    void initFlags();
     long _time;
     bool move_lock = true;
     QTimer *timer;

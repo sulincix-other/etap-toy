@@ -28,13 +28,6 @@ float scale = 1;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QScreen *screen = QGuiApplication::primaryScreen();
     scale = screen->size().height() / 1080.0;
-    setWindowFlags(Qt::WindowStaysOnTopHint
-                      | Qt::Tool
-                      | Qt::WindowStaysOnTopHint
-                      | Qt::WindowSystemMenuHint
-                      | Qt::WindowDoesNotAcceptFocus
-                      | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground);
     QLabel *move = new QLabel("Test", this);
     QIcon icon = QIcon(":images/move-icon.svg");
     QPixmap pixmap = icon.pixmap(icon.actualSize(QSize(butsize, butsize)));
@@ -51,7 +44,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     installEventFilter(this);
     do_move(settings->value("last-position").toPoint());
+    initFlags();
     show();
+}
+
+void MainWindow::initFlags(){
+    setWindowFlags(Qt::WindowStaysOnTopHint
+                      | Qt::Tool
+                      | Qt::WindowStaysOnTopHint
+                      | Qt::WindowSystemMenuHint
+                      | Qt::WindowDoesNotAcceptFocus
+                      | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
 }
 
 void MainWindow::onButtonClicked() {
@@ -91,6 +95,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     if(event->type() == QEvent::Hide || event->type() == QEvent::WindowStateChange){
         if(hide_lock){
             hide();
+            initFlags();
             show();
         }
     }
